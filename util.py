@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 
 def generating_l2_norm(all_fmaps, samples_num):
@@ -31,3 +32,28 @@ def generating_l2_norm(all_fmaps, samples_num):
         else:
             l2_norm = np.concatenate((l2_norm, l2_norm_temp_sample), axis=0)
     return l2_norm
+
+
+def generate_training_plots(train_acc, val_acc, train_loss, val_loss, path):
+    assert len(train_acc) == len(val_acc) == len(train_loss) == len(val_loss)
+    epochs = len(train_acc)
+
+    x_axis = [x for x in range(epochs)]
+
+    plt.plot(x_axis, train_acc, 'tab:blue', label='train accuracy')
+    plt.plot(x_axis, val_acc, 'tab:orange', label='validation accuracy')
+
+    plt.xlabel("Epochs")
+    plt.ylabel("Accuracy")
+    plt.legend()
+    plt.savefig(path + 'accuracy.png')
+    plt.clf()
+
+    plt.plot(x_axis, train_loss, 'tab:blue', label='train loss')
+    plt.plot(x_axis, val_loss, 'tab:orange', label='validation loss')
+
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.legend()
+    plt.savefig(path + 'loss.png')
+    plt.clf()
