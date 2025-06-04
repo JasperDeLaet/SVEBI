@@ -3,7 +3,20 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision.models import vgg
 
+'''
+This file implements the spiking VGG19 (SVGG19) model. 
+The implementation of the spiking VGG19 is based on the non-spiking VGG models in which we overwrite the forward pass to
+include spiking behaviour. In this we preserve the initial topology of the VGG19 such that we can use its weights as
+starting point to train from. 
 
+The surrogate gradient function has been inspired by the surrogate gradient function of the work: 
+"Revisiting Batch Normalization for Training Low-latency Deep Spiking Neural Networks from Scratch"
+Github: https://github.com/Intelligent-Computing-Lab-Yale/BNTT-Batch-Normalization-Through-Time?tab=readme-ov-file
+Preprint: https://arxiv.org/abs/2010.01729
+'''
+
+
+# Custom forward and backward function to implement surrogate gradient
 class Surrogate_BP_Function(torch.autograd.Function):
     # Custom spiking function for SNN with surrogate gradient for backward pass
     @staticmethod
@@ -31,14 +44,11 @@ class svgg19(vgg.VGG):
         self.spike_fn = Surrogate_BP_Function.apply
         self.img_size = img_size
 
-
-        bias_flag = False
-
         for m in self.modules():
-            if (isinstance(m, nn.Conv2d)):
+            if isinstance(m, nn.Conv2d):
                 m.threshold = 1.0
                 torch.nn.init.xavier_uniform_(m.weight, gain=2)
-            elif (isinstance(m, nn.Linear)):
+            elif isinstance(m, nn.Linear):
                 m.threshold = 1.0
                 torch.nn.init.xavier_uniform_(m.weight, gain=2)
 

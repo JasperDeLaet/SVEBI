@@ -37,10 +37,7 @@ np.random.shuffle(indices)
 activations = activations[indices, :]
 labels = labels[indices, :]
 
-'''
-Here it is necessary to change the type to fortran as it is needed by the library that implements
-the lasso optimization function.
-'''
+# For spams lasso optimization
 X = np.asfortranarray(activations)
 L = np.asfortranarray(labels)
 
