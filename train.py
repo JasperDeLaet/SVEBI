@@ -68,7 +68,7 @@ transform = transforms.Compose([
 
 dataset = datasets.ImageFolder(data_path, transform=transform)
 
-# Split data
+# Split data in train and test
 total_count = len(dataset.imgs)
 train_count = int(0.8 * total_count)
 test_count = total_count - train_count
