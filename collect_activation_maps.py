@@ -1,4 +1,3 @@
-import torch
 import pickle
 from torch.utils.data.dataloader import DataLoader
 from torchvision import datasets, transforms
