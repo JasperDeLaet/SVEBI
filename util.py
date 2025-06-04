@@ -57,3 +57,15 @@ def generate_training_plots(train_acc, val_acc, train_loss, val_loss, path):
     plt.legend()
     plt.savefig(path + 'loss.png')
     plt.clf()
+
+def normalize_numpy(batch):
+    normalized_batch = np.empty_like(batch)
+
+    for i in range(batch.shape[0]):
+        A = batch[i]
+        if np.max(A) == 0.0:
+            normalized_batch[i] = A
+        else:
+            normalized_batch[i] = (A - np.min(A)) / (np.max(A) - np.min(A))
+
+    return normalized_batch
