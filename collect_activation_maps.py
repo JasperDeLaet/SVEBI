@@ -206,7 +206,7 @@ for class_index in range(number_of_classes):
         inputs, labels = data
         inputs = inputs.to(device, dtype=torch.float)
         labels = labels.to(device)
-        output, all_spikemaps = model(inputs)
+        output, all_activation_maps = model(inputs)
 
         output = output.detach().cpu()
 
@@ -214,8 +214,8 @@ for class_index in range(number_of_classes):
         labels = labels.detach().cpu().numpy()
 
         pred = torch.argmax(output, dim=1)
-        l2_norm = generating_l2_norm(all_spikemaps, labels.shape[0])
-        del all_spikemaps
+        l2_norm = generating_l2_norm(all_activation_maps, labels.shape[0])
+        del all_activation_maps
 
         if X is None:
             X = l2_norm
